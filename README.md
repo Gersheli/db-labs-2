@@ -1,1 +1,1 @@
-# db-labs-2
+# DB labs part 2, Shunko Victor, 153504
