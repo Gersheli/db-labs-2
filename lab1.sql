@@ -1,8 +1,11 @@
+-- 1.Создайте таблицу MyTable(id number, val number)
 CREATE TABLE MyTable (
   id NUMBER,
   val NUMBER
 );
 
+-- 2. Напишите анонимный блок, который записывает в таблицу 
+-- MyTable 10 000 целых случайных записей.
 DECLARE
   v_id NUMBER;
   v_val NUMBER;
@@ -15,6 +18,10 @@ BEGIN
   COMMIT;
 END;
 
+-- 3. Напишите собственнуюфункцию, которая выводит TRUE 
+-- если четных значений val в таблице MyTable больше, 
+-- FALSE если больше нечетных значений и EQUAL если 
+-- количество четных и нечетных равно
 CREATE OR REPLACE FUNCTION CheckEvenOdd
 RETURN VARCHAR2
 IS
@@ -46,6 +53,8 @@ BEGIN
   DBMS_OUTPUT.PUT_LINE('Result: ' || v_result);
 END;
 
+-- 4. Напишите функцию, которая по введенному значению ID, сгенерирует и выведет 
+-- в консоль текстовое значение команды insert для вставки указанной строки
 CREATE OR REPLACE FUNCTION GenerateInsertCommand(p_id NUMBER)
 RETURN VARCHAR2
 IS
@@ -65,4 +74,50 @@ DECLARE
   v_insert_cmd VARCHAR2(200);
 BEGIN
   v_insert_cmd := GenerateInsertCommand(643);
+END;
+
+-- 5. Написать процедуры, реализующие DML операции 
+-- (INSERT, UPDATE, DELETE) для указанной таблицы
+CREATE OR REPLACE PROCEDURE InsertRecord(p_id NUMBER, p_val NUMBER)
+IS
+BEGIN
+  INSERT INTO MyTable (id, val) VALUES (p_id, p_val);
+  COMMIT;
+END;
+
+CREATE OR REPLACE PROCEDURE UpdateRecord(p_id NUMBER, p_new_val NUMBER)
+IS
+BEGIN
+  UPDATE MyTable SET val = p_new_val WHERE id = p_id;
+  COMMIT;
+END;
+
+CREATE OR REPLACE PROCEDURE DeleteRecord(p_id NUMBER)
+IS
+BEGIN
+  DELETE FROM MyTable WHERE id = p_id;
+  COMMIT;
+END;
+
+CREATE OR REPLACE PROCEDURE DeleteAllRecords
+IS
+BEGIN
+  DELETE FROM MyTable;
+  COMMIT;
+END;
+
+BEGIN
+  DeleteAllRecords;
+END;
+
+BEGIN
+  InsertRecord(1, 100);
+END;
+
+BEGIN
+  UpdateRecord(1, 200);
+END;
+
+BEGIN
+  DeleteRecord(1);
 END;
