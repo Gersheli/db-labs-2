@@ -15,3 +15,33 @@ BEGIN
   COMMIT;
 END;
 
+CREATE OR REPLACE FUNCTION CheckEvenOdd
+RETURN VARCHAR2
+IS
+  v_even_count NUMBER := 0;
+  v_odd_count NUMBER := 0;
+BEGIN
+  FOR rec IN (SELECT val FROM MyTable)
+  LOOP
+    IF MOD(rec.val, 2) = 0 THEN
+      v_even_count := v_even_count + 1;
+    ELSE
+      v_odd_count := v_odd_count + 1;
+    END IF;
+  END LOOP;
+
+  IF v_even_count > v_odd_count THEN
+    RETURN 'TRUE';
+  ELSIF v_even_count < v_odd_count THEN
+    RETURN 'FALSE';
+  ELSE
+    RETURN 'EQUAL';
+  END IF;
+END;
+
+DECLARE
+  v_result VARCHAR2(10);
+BEGIN
+  v_result := CheckEvenOdd();
+  DBMS_OUTPUT.PUT_LINE('Result: ' || v_result);
+END;
